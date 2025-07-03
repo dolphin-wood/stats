@@ -92,7 +92,7 @@ div.ellipsis {
 
 <div>
 <span class="progress">
-<span style="background-color: #3178c6;width: 53.588%;" class="progress-item"></span><span style="background-color: #3572A5;width: 15.636%;" class="progress-item"></span><span style="background-color: #f1e05a;width: 14.454%;" class="progress-item"></span><span style="background-color: #555555;width: 4.453%;" class="progress-item"></span><span style="background-color: #663399;width: 4.015%;" class="progress-item"></span><span style="background-color: #b07219;width: 3.016%;" class="progress-item"></span><span style="background-color: #c6538c;width: 1.826%;" class="progress-item"></span><span style="background-color: #ff3e00;width: 1.359%;" class="progress-item"></span><span style="background-color: #00ADD8;width: 1.123%;" class="progress-item"></span><span style="background-color: #f34b7d;width: 0.530%;" class="progress-item"></span>
+<span style="background-color: #3178c6;width: 54.875%;" class="progress-item"></span><span style="background-color: #3572A5;width: 15.173%;" class="progress-item"></span><span style="background-color: #f1e05a;width: 14.030%;" class="progress-item"></span><span style="background-color: #555555;width: 4.322%;" class="progress-item"></span><span style="background-color: #663399;width: 3.958%;" class="progress-item"></span><span style="background-color: #b07219;width: 2.927%;" class="progress-item"></span><span style="background-color: #c6538c;width: 1.792%;" class="progress-item"></span><span style="background-color: #ff3e00;width: 1.318%;" class="progress-item"></span><span style="background-color: #00ADD8;width: 1.090%;" class="progress-item"></span><span style="background-color: #f34b7d;width: 0.514%;" class="progress-item"></span>
 </span>
 </div>
 
@@ -105,7 +105,7 @@ div.ellipsis {
         <circle xmlns="http://www.w3.org/2000/svg" cx="8" cy="9" r="5" />
     </svg>
     <span class="lang">TypeScript</span>
-    <span class="percent">53.59%</span>
+    <span class="percent">54.88%</span>
 </li>
 
 
@@ -115,7 +115,7 @@ div.ellipsis {
         <circle xmlns="http://www.w3.org/2000/svg" cx="8" cy="9" r="5" />
     </svg>
     <span class="lang">Python</span>
-    <span class="percent">15.64%</span>
+    <span class="percent">15.17%</span>
 </li>
 
 
@@ -125,7 +125,7 @@ div.ellipsis {
         <circle xmlns="http://www.w3.org/2000/svg" cx="8" cy="9" r="5" />
     </svg>
     <span class="lang">JavaScript</span>
-    <span class="percent">14.45%</span>
+    <span class="percent">14.03%</span>
 </li>
 
 
@@ -135,7 +135,7 @@ div.ellipsis {
         <circle xmlns="http://www.w3.org/2000/svg" cx="8" cy="9" r="5" />
     </svg>
     <span class="lang">C</span>
-    <span class="percent">4.45%</span>
+    <span class="percent">4.32%</span>
 </li>
 
 
@@ -145,7 +145,7 @@ div.ellipsis {
         <circle xmlns="http://www.w3.org/2000/svg" cx="8" cy="9" r="5" />
     </svg>
     <span class="lang">CSS</span>
-    <span class="percent">4.01%</span>
+    <span class="percent">3.96%</span>
 </li>
 
 
@@ -155,7 +155,7 @@ div.ellipsis {
         <circle xmlns="http://www.w3.org/2000/svg" cx="8" cy="9" r="5" />
     </svg>
     <span class="lang">Java</span>
-    <span class="percent">3.02%</span>
+    <span class="percent">2.93%</span>
 </li>
 
 
@@ -165,7 +165,7 @@ div.ellipsis {
         <circle xmlns="http://www.w3.org/2000/svg" cx="8" cy="9" r="5" />
     </svg>
     <span class="lang">SCSS</span>
-    <span class="percent">1.83%</span>
+    <span class="percent">1.79%</span>
 </li>
 
 
@@ -175,7 +175,7 @@ div.ellipsis {
         <circle xmlns="http://www.w3.org/2000/svg" cx="8" cy="9" r="5" />
     </svg>
     <span class="lang">Svelte</span>
-    <span class="percent">1.36%</span>
+    <span class="percent">1.32%</span>
 </li>
 
 
@@ -185,7 +185,7 @@ div.ellipsis {
         <circle xmlns="http://www.w3.org/2000/svg" cx="8" cy="9" r="5" />
     </svg>
     <span class="lang">Go</span>
-    <span class="percent">1.12%</span>
+    <span class="percent">1.09%</span>
 </li>
 
 
@@ -195,7 +195,7 @@ div.ellipsis {
         <circle xmlns="http://www.w3.org/2000/svg" cx="8" cy="9" r="5" />
     </svg>
     <span class="lang">C++</span>
-    <span class="percent">0.53%</span>
+    <span class="percent">0.51%</span>
 </li>
 
 
