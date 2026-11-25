@@ -5,7 +5,6 @@ import os
 from typing import Dict, List, Optional, Set, Tuple, Any, cast
 
 import aiohttp
-import requests
 
 
 ###############################################################################
@@ -41,79 +40,55 @@ class Queries(object):
         headers = {
             "Authorization": f"Bearer {self.access_token}",
         }
-        try:
-            async with self.semaphore:
-                r_async = await self.session.post(
-                    "https://api.github.com/graphql",
-                    headers=headers,
-                    json={"query": generated_query},
-                )
-            result = await r_async.json()
-            if result is not None:
-                return result
-        except:
-            print("aiohttp failed for GraphQL query")
-            # Fall back on non-async requests
-            async with self.semaphore:
-                r_requests = requests.post(
-                    "https://api.github.com/graphql",
-                    headers=headers,
-                    json={"query": generated_query},
-                )
-                result = r_requests.json()
-                if result is not None:
-                    return result
-        return dict()
+        async with self.semaphore:
+            async with self.session.post(
+                "https://api.github.com/graphql",
+                headers=headers,
+                json={"query": generated_query},
+            ) as r:
+                # Fail the run instead of rendering all-zero stats when the
+                # token is wrong or GitHub is down.
+                r.raise_for_status()
+                result = await r.json()
+        return result if result is not None else dict()
 
-    async def query_rest(self, path: str, params: Optional[Dict] = None) -> Dict:
+    async def query_rest(self, path: str, params: Optional[Dict] = None) -> Any:
         """
         Make a request to the REST API
         :param path: API path to query
         :param params: Query parameters to be passed to the API
-        :return: deserialized REST JSON output
+        :return: deserialized REST JSON output, or an empty dict when there is
+            nothing to read
         """
+        headers = {
+            "Authorization": f"token {self.access_token}",
+        }
+        url = f"https://api.github.com/{path.lstrip('/')}"
 
         for _ in range(60):
-            headers = {
-                "Authorization": f"token {self.access_token}",
-            }
-            if params is None:
-                params = dict()
-            if path.startswith("/"):
-                path = path[1:]
-            try:
-                async with self.semaphore:
-                    r_async = await self.session.get(
-                        f"https://api.github.com/{path}",
-                        headers=headers,
-                        params=tuple(params.items()),
-                    )
-                if r_async.status == 202:
-                    # print(f"{path} returned 202. Retrying...")
-                    print(f"A path returned 202. Retrying...")
-                    await asyncio.sleep(2)
-                    continue
+            async with self.semaphore:
+                async with self.session.get(
+                    url, headers=headers, params=params or {}
+                ) as r:
+                    status = r.status
+                    if status == 200:
+                        return await r.json()
 
-                result = await r_async.json()
-                if result is not None:
-                    return result
-            except:
-                print("aiohttp failed for rest query")
-                # Fall back on non-async requests
-                async with self.semaphore:
-                    r_requests = requests.get(
-                        f"https://api.github.com/{path}",
-                        headers=headers,
-                        params=tuple(params.items()),
-                    )
-                    if r_requests.status_code == 202:
-                        print(f"A path returned 202. Retrying...")
-                        await asyncio.sleep(2)
-                        continue
-                    elif r_requests.status_code == 200:
-                        return r_requests.json()
-        # print(f"There were too many 202s. Data for {path} will be incomplete.")
-        print("There were too many 202s. Data for this repository will be incomplete.")
+            # GitHub computes repository statistics in the background and
+            # answers 202 until they are ready. Wait outside the semaphore so
+            # other requests can go on meanwhile.
+            if status == 202 or status >= 500:
+                await asyncio.sleep(2)
+                continue
+
+            # 204 means an empty repository, 403/404 that the token cannot read
+            # this endpoint. Retrying will not change the answer.
+            return dict()
+
+        print(
+            "GitHub did not return data in time. "
+            "Data for this repository will be incomplete."
+        )
         return dict()
 
     @staticmethod
@@ -377,7 +352,7 @@ Languages:
         #       specific filetypes
         langs_total = sum([v.get("size", 0) for v in self._languages.values()])
         for k, v in self._languages.items():
-            v["prop"] = 100 * (v.get("size", 0) / langs_total)
+            v["prop"] = 100 * (v.get("size", 0) / langs_total) if langs_total else 0
 
     @property
     async def name(self) -> str:
@@ -482,8 +457,14 @@ Languages:
             return self._lines_changed
         additions = 0
         deletions = 0
-        for repo in await self.repos:
-            r = await self.queries.query_rest(f"/repos/{repo}/stats/contributors")
+        repos = await self.repos
+        results = await asyncio.gather(
+            *(
+                self.queries.query_rest(f"/repos/{repo}/stats/contributors")
+                for repo in repos
+            )
+        )
+        for r in results:
             for author_obj in r:
                 # Handle malformed response from the API by skipping this repo
                 if not isinstance(author_obj, dict) or not isinstance(
@@ -511,8 +492,14 @@ Languages:
             return self._views
 
         total = 0
-        for repo in await self.repos:
-            r = await self.queries.query_rest(f"/repos/{repo}/traffic/views")
+        repos = await self.repos
+        results = await asyncio.gather(
+            *(
+                self.queries.query_rest(f"/repos/{repo}/traffic/views")
+                for repo in repos
+            )
+        )
+        for r in results:
             for view in r.get("views", []):
                 total += view.get("count", 0)
 
