@@ -152,10 +152,10 @@ async def main() -> None:
         )
         overview = await get_overview(s)
         top10_languages, percent_scale = await get_languages(s)
-        generate_overview(overview),
-        generate_overview(overview, dark=True),
-        generate_languages(top10_languages, percent_scale),
-        generate_languages(top10_languages, percent_scale, dark=True),
+        generate_overview(overview)
+        generate_overview(overview, dark=True)
+        generate_languages(top10_languages, percent_scale)
+        generate_languages(top10_languages, percent_scale, dark=True)
 
 
 if __name__ == "__main__":
